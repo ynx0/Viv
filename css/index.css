@@ -1,0 +1,229 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+/* ___RESET___ */
+
+*, html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ___GENERAL___ */
+
+html, body {
+  -webkit-app-region: drag;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Lato', serif;
+  background: #ffffff;
+  color: #495057;
+
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* ___MAIN___ */
+
+.container {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+}
+
+.left,
+.right {
+  flex-basis: 50%;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+.left {
+  text-align: center;
+  margin: auto;
+  padding-top: 15vh;
+  width: 50%;
+}
+
+.right {
+  box-sizing: border-box;
+  padding: 50px 0 70px 0;
+}
+
+.child {
+  width: 100%;
+  text-align: center;
+}
+
+
+/* ___CONTENT___ */
+
+h1 {
+  font-size: 48px;
+}
+
+#pausePlay {
+  margin: 20px auto;
+  width: 20%;
+}
+
+.links li {
+  display: inline-block;
+  color: #ced4da;
+  transition: 300ms;
+  padding: 20px;
+}
+
+.links a {
+  text-decoration: none;
+}
+
+.links li:hover {
+  color: #343a40;
+}
+
+.scriptCommand {
+  margin-top: 20px;
+  padding: 20px 0px 20px 0px;
+  border-radius: 5px;
+  transition: 300ms;
+}
+
+.scriptCommand:hover {
+  background-color: #f1f3f5;
+}
+
+
+/* ___TABLE___ */
+
+table {
+  width: 35vw;
+}
+
+td {
+  transition: 300ms;
+}
+
+th:first-child, td:first-child { text-align: left; }
+th:nth-child(2), td:nth-child(2) { text-align: right; }
+
+td:nth-child(2) {
+  padding: 5px;
+  background-color: #f1f3f5;
+  border-radius: 5px;
+  transition: 300ms;
+}
+
+td:nth-child(3) {
+  padding: 5px;
+  color: #868e96;
+}
+
+th {
+  font-weight: 700;
+  color: #868e96;
+  padding-bottom: 30px;
+}
+
+.separator {
+  height: 40px;
+}
+
+.separator td {
+  font-size: 14px;
+  text-transform: lowercase;
+  color: #ced4da;
+}
+
+.separator td:nth-child(2) {
+  background-color: #fff;
+}
+
+.details {
+  color: #868e96;
+  font-size: 12px;
+  padding-left: 5px;
+}
+
+/* ___FOOTER___ */
+
+footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 55px;
+    width: 100%;
+    background: #ffffff;
+}
+
+.footer {
+  height: 55px;
+}
+
+.footer .footer-right li {
+  display: inline-block;
+  list-style-type: none;
+  margin-right: 15px;
+}
+
+.footer-right {
+  float: right;
+}
+
+.footer li {
+  padding: 15px 0px 0px 15px;
+  color: #ced4da;
+  transition: 300ms;
+}
+
+.footer li:hover {
+  color: #343a40;
+  transition: 300ms;
+}
+
+.footer-right li:last-child {
+  padding-right: 25px;
+}
+
+
+
+/* Drag and drop */
+
+#dropZone {
+  background: #ced4da;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.9;
+  visibility: hidden;
+
+  display: flex;
+
+  font-size: 48px;
+  margin: auto;
+}
+
+#dropZone h3 {
+  margin: auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* space */
