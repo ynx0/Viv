@@ -10,7 +10,8 @@
   "author": "Paco Coursey",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.6.1"
+    "electron": "^1.6.1",
+    "electron-rebuild": "^1.7.3"
   },
   "dependencies": {
     "electron-builder": "^19.6.1",

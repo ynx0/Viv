@@ -234,10 +234,14 @@ app.on('ready', function() {
     icon: './app-icon.icns'
   });
 
-  mainWindow.loadURL('file://' + __dirname + '/index.html');
+  fileName = app.getPath('documents') + "/viv.viv";
 
-  fileName = app.getPath('documents') + "/default.viv";
-  openFile(fileName);
+  if(fs.existsSync(fileName)) {
+    mainWindow.loadURL('file://' + __dirname + '/index.html');
+    openFile(fileName);
+  } else {
+    mainWindow.loadURL('file://' + __dirname + '/preferences.html');
+  }
 
 
   var application_menu = [
