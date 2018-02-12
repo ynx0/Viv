@@ -1,8 +1,19 @@
 # viv
 
-## Description
+## Installation
 
-A simple cross-platform keyboard mapper.
+Want to try it out? Run the following from the command line.
+
+```
+$ git clone https://github.com/pacocoursey/viv.git
+$ cd viv
+$ npm install
+$ npm start
+```
+
+Keep in mind this project is still under development.
+
+![viv Screenshot](https://pacocoursey.github.io/img/viv.png?raw=true)
 
 ## Usage
 
@@ -39,13 +50,7 @@ Viv supports all of the cross-platform supported keys listed here: https://robot
 
 ```
 
-## Downloads
 
-Coming soon.
-
-## Screenshots
-
-![example](https://persiflage.github.io/viv.png)
 
 ## License
 
