@@ -236,12 +236,12 @@ app.on('ready', function() {
 
   fileName = app.getPath('documents') + "/viv.viv";
 
-  if(fs.existsSync(fileName)) {
+  // if(fs.existsSync(fileName)) {
     mainWindow.loadURL('file://' + __dirname + '/index.html');
     openFile(fileName);
-  } else {
-    mainWindow.loadURL('file://' + __dirname + '/preferences.html');
-  }
+  // } else {
+  //   mainWindow.loadURL('file://' + __dirname + '/preferences.html');
+  // }
 
 
   var application_menu = [

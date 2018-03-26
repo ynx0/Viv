@@ -50,8 +50,4 @@ Viv supports all of the cross-platform supported keys listed here: https://robot
 
 ```
 
-
-
-## License
-
-MIT
+---

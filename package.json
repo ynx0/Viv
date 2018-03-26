@@ -10,11 +10,12 @@
   "author": "Paco Coursey",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.6.1",
+    "electron": "^1.8.4",
     "electron-rebuild": "^1.7.3"
   },
   "dependencies": {
-    "electron-builder": "^19.6.1",
+    "electron-builder": "^19.56.2",
+    "npm": "^5.8.0",
     "robotjs": "^0.4.7"
   }
 }

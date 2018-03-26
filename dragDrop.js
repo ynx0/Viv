@@ -8,7 +8,7 @@ function hideDropZone() {
 }
 
 function allowDrag(e) {
-    if (true) {  // Test that the item being dragged is a valid one
+    if (true) {
         e.dataTransfer.dropEffect = 'copy';
         e.preventDefault();
     }
