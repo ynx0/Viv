@@ -9,12 +9,7 @@
   "repository": "https://github.com/pacocoursey/viv",
   "author": "Paco Coursey",
   "license": "MIT",
-  "devDependencies": {
-    "electron": "^1.8.4",
-    "electron-rebuild": "^1.7.3"
-  },
   "dependencies": {
-    "electron-builder": "^19.56.2",
     "npm": "^5.8.0",
     "robotjs": "^0.4.7"
   }
