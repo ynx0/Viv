@@ -1,11 +1,8 @@
 const {app, BrowserWindow, Menu, globalShortcut, ipcMain, dialog} = require('electron');
 
-//const settings = require('electron-settings');
+const settings = require('electron-settings');
 const robot = require('robotjs');
 const fs = require('fs');
-
-/* For debugging */
-//require('electron-debug')({showDevTools: false});
 
 /* Variables */
 let mainWindow;
@@ -26,10 +23,6 @@ global.commands = [];
 var keyboard = ["backspace", "delete", "enter", "tab", "escape", "up", "down", "right", "left", "home", "end", "pageUp", "pageDown", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "command", "alt", "control", "shift", "right_shift", "space", "audio_mute", "audio_vol_down", "audio_vol_up", "audio_play", "audio_stop", "audio_pause", "audio_prev", "audio_next", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "`", "\\", "/", "]", "[", "-", "=", ",", "." ];
 
 var actions = ["rightclick", "move", "click", "toggle"];
-
-// export.registerAll = registerAll;
-// export.unregisterAll = unregisterAll;
-
 
 /* _____________________________________________
  * ________________FUNCTIONS____________________
@@ -130,10 +123,6 @@ const parseFile = function(content) {
       rows.push({"type":"command", "value":command});
     }
   }
-
-  /* Finished parsing file */
-  //console.log(commands);
-  //console.log(rows);
 }
 
 const reset = function() {
@@ -234,15 +223,12 @@ app.on('ready', function() {
     icon: './app-icon.icns'
   });
 
-  fileName = app.getPath('documents') + "/viv.viv";
-
-  // if(fs.existsSync(fileName)) {
+  if(settings.has('default')) {
     mainWindow.loadURL('file://' + __dirname + '/index.html');
-    openFile(fileName);
-  // } else {
-  //   mainWindow.loadURL('file://' + __dirname + '/preferences.html');
-  // }
-
+    openFile(settings.get('default'));
+  } else {
+    mainWindow.loadURL('file://' + __dirname + '/preferences.html');
+  }
 
   var application_menu = [
     {
