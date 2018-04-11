@@ -1,23 +1,25 @@
-const {app, BrowserWindow, Menu, globalShortcut, ipcMain, dialog} = require('electron');
+const {app, BrowserWindow, Menu, MenuItem, globalShortcut, ipcMain, dialog} = require('electron');
 
-const settings = require('electron-settings');
-const robot = require('robotjs');
-const fs = require('fs');
+const url = require('url')
+const path = require('path')
+const settings = require('electron-settings')
+const robot = require('robotjs')
+const fs = require('fs')
 
 /* Variables */
-let mainWindow;
+let win;
 
 global.fileName;
 
 /* Boolean: if keybinds are active */
-global.keysActive = true;
+global.keysActive = true
 
 /* By default toggle is \ */
-global.toggle = {"keybind":"\\", "action":"toggle"};
+global.toggle = {"keybind":"\\", "action":"toggle"}
 
-global.rows = [];
-var keys = [];
-global.commands = [];
+global.rows = []
+var keys = []
+global.commands = []
 
 /* This is shitty but good enough for now */
 var keyboard = ["backspace", "delete", "enter", "tab", "escape", "up", "down", "right", "left", "home", "end", "pageUp", "pageDown", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10", "f11", "f12", "command", "alt", "control", "shift", "right_shift", "space", "audio_mute", "audio_vol_down", "audio_vol_up", "audio_play", "audio_stop", "audio_pause", "audio_prev", "audio_next", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "`", "\\", "/", "]", "[", "-", "=", ",", "." ];
@@ -137,11 +139,13 @@ const reset = function() {
   globalShortcut.unregisterAll();
 
   /* Reset table in renderer */
-  mainWindow.webContents.executeJavaScript('resetTable()');
+  win.webContents.executeJavaScript('resetTable()');
 
 }
 
 const openFile = function(path) {
+
+  fileName = path;
 
   /* Reset state */
   reset();
@@ -162,18 +166,18 @@ const openFile = function(path) {
     }
 
     keysActive = !keysActive;
-    mainWindow.webContents.send('keysToggle', keysActive);
+    win.webContents.send('keysToggle', keysActive);
   });
 
   /* Setup complete, print keybind table */
-  mainWindow.webContents.executeJavaScript('printTable()');
+  win.webContents.executeJavaScript('printTable()');
 
 
 }
 
 const registerKey = function(command) {
   globalShortcut.register(command["keybind"], function() {
-    mainWindow.webContents.send('command', command);
+    win.webContents.send('command', command);
   });
 }
 
@@ -198,6 +202,17 @@ const toggler = function(state) {
   keysActive = state;
 }
 
+const loadIndex = function() {
+  win.loadURL(url.format({
+		pathname: path.join(__dirname, 'index.html'),
+		protocol: 'file:',
+		slashes: true
+	}))
+  openFile(settings.get("default.path"))
+}
+
+exports.loadIndex = loadIndex;
+
 exports.toggler = toggler;
 exports.unregisterAll = unregisterAll;
 exports.registerAll = registerAll;
@@ -207,13 +222,63 @@ exports.openFile = openFile;
 /* _____________________________________________
  * ________________INITIALIZE___________________
  * _____________________________________________
- *
+ */
+
+  const template = [
+    {
+      label: 'View',
+      submenu: [
+        {role: 'reload'},
+        {role: 'forcereload'},
+        {role: 'toggledevtools'},
+      ]
+    },
+    {
+      role: 'window',
+      submenu: [
+        {role: 'minimize'},
+        {role: 'close'}
+      ]
+    }
+  ]
+
+  if (process.platform === 'darwin') {
+    template.unshift({
+      label: app.getName(),
+      submenu: [
+        {role: 'about'},
+        {type: 'separator'},
+        {
+          label: 'Preferences',
+          accelerator: 'Cmd+,',
+          click: () => {
+            unregisterAll()
+            win.loadURL(url.format({
+              pathname: path.join(__dirname, 'preferences.html'),
+              protocol: 'file:',
+              slashes: true
+            }))
+          }
+        },
+        {type: 'separator'},
+        {role: 'services', submenu: []},
+        {type: 'separator'},
+        {role: 'hide'},
+        {role: 'hideothers'},
+        {role: 'unhide'},
+        {type: 'separator'},
+        {role: 'quit'}
+      ]
+    })
+  }
+
+
 
 
 /* Setup main window */
-app.on('ready', function() {
+function createWindow () {
 
-  mainWindow = new BrowserWindow({
+  win = new BrowserWindow({
     width: 960,
     height: 544,
     frame: false,
@@ -221,98 +286,83 @@ app.on('ready', function() {
     y: 0,
     title: 'viv',
     icon: './app-icon.icns'
-  });
+  })
 
-  if(settings.has('default')) {
-    mainWindow.loadURL('file://' + __dirname + '/index.html');
-    openFile(settings.get('default'));
+  let webContents = win.webContents
+  webContents.on('did-finish-load', () => {
+    webContents.setZoomFactor(1)
+    webContents.setVisualZoomLevelLimits(1, 1)
+    webContents.setLayoutZoomLevelLimits(0, 0)
+  })
+
+  webContents.on('new-window', function(event, url){
+    event.preventDefault()
+    open(url)
+  })
+
+  if(settings.has('default.path')) {
+    win.loadURL(url.format({
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file:',
+      slashes: true
+    }))
+    fileName = settings.get('default.path');
+    openFile(settings.get('default.path'))
   } else {
-    mainWindow.loadURL('file://' + __dirname + '/preferences.html');
+    win.loadURL(url.format({
+      pathname: path.join(__dirname, 'preferences.html'),
+      protocol: 'file:',
+      slashes: true
+    }))
   }
 
-  var application_menu = [
-    {
-      label: 'File',
-      submenu: [
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Close Window',
-          accelerator: 'CmdOrCtrl+W',
-          role: 'close'
-        },
-        {
-          label: 'Minimize Window',
-          accelerator: 'CmdOrCtrl+M',
-          role: 'minimize'
-        }
-      ]
-    }
-  ];
+  win.webContents.on('will-navigate', ev => {
+    ev.preventDefault()
+  })
 
-  if (process.platform == 'darwin') {
-    const name = app.getName();
-    application_menu.unshift({
-      label: name,
-      submenu: [
-        {
-          label: 'About ' + name,
-          role: 'about'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Services',
-          role: 'services',
-          submenu: []
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Hide ' + name,
-          accelerator: 'Command+H',
-          role: 'hide'
-        },
-        {
-          label: 'Hide Others',
-          accelerator: 'Command+Shift+H',
-          role: 'hideothers'
-        },
-        {
-          label: 'Show All',
-          role: 'unhide'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Quit',
-          accelerator: 'Command+Q',
-          click: () => { app.quit(); }
-        },
-      ]
-    });
-  }
+  win.once('ready-to-show', () => {
+    win.show()
+  })
 
-  menu = Menu.buildFromTemplate(application_menu);
-  Menu.setApplicationMenu(menu);
-
-  mainWindow.on('closed', function() {
-    mainWindow = null;
-  });
-
-});
+  // menu = new Menu()
+  // menu.append(new MenuItem({
+  //     label: 'Test Ya',
+  //     accelerator: 'CmdOrCtrl+P',
+  //     click: () => { console.log('time to print stuff') }
+  // }))
 
 
-/* Handle window closing and graceful exits */
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
+
+
+
+  win.on('closed', () => {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    win = null
+  })
+
+}
+
+app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
-  //if (process.platform != 'darwin')
-    app.quit();
-});
+  // On macOS it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+app.on('activate', () => {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (win === null) {
+    createWindow()
+  }
+})
 
 app.on('will-quit', () => {
   globalShortcut.unregisterAll();
