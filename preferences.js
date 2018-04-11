@@ -1,5 +1,5 @@
 const {dialog} = require('electron').remote
-const mainProcess = require('electron').remote.require('./main');
+const mainProcess = require('electron').remote.require('./main')
 const settings = require('electron').remote.require('electron-settings')
 var path = require('path')
 
@@ -19,15 +19,15 @@ function openDialog() {
 				"path":filepath
 			})
 
-			message.style.opacity = 1;
+			message.style.opacity = 1
 			setTimeout(function() {
-				message.style.opacity = 0;
-			}, 3000);
+				message.style.opacity = 0
+			}, 3000)
 		})
 	}
 }
 
 var back = document.getElementById("back")
 back.addEventListener("click", function() {
-	mainProcess.loadIndex();
+	mainProcess.loadIndex()
 })
